@@ -10,6 +10,10 @@ def main():
 	square.fill((0, 255, 0))
 	square.convert()
 
+	mySprite = joshPyLib.animatedSprite(screen, background, 50, 50, "back_button.png")
+
+	allSprites = pygame.sprite.Group(mySprite)
+
 	keepGoing = True
 	clock = pygame.time.Clock()
 	while keepGoing:
@@ -18,13 +22,23 @@ def main():
 			if event.type == pygame.QUIT:
 				keepGoing = False
 			elif event.type == pygame.MOUSEBUTTONDOWN:
-				if joshPyLib.surfaceClicked(joshPyLib.getClickLocation(event), square, 50, 50):
-					print "square clicked"
-				else:
-					print "Nothing clicked"
+				mySprite.moveToLocation(100, 200)
+				#mySprite.printStats()
+				#mySprite.hide()
+			#elif event.type == pygame.MOUSEBUTTONUP:
+				#mySprite.show()
+				#mySprite.stopMoving()
+			elif event.type == pygame.KEYDOWN:
+				mySprite.pause()
+			elif event.type == pygame.KEYUP:
+				mySprite.play()
 		screen.blit(background, (0, 0))
-		screen.blit(square, (50, 50))
-
+		screen.blit(square, (200, 200))
+		
+		allSprites.clear(screen, background)
+		allSprites.update()
+		allSprites.draw(screen)
+		
 		pygame.display.flip()
 
 if __name__ == "__main__":
