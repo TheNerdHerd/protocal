@@ -1,6 +1,5 @@
 #in animation sprite....
-#TODO: use a queue to store all queued movements
-#TODO: fix a bug where if one sets a sprite to go to a new position right after he did likewise, the sprite acts weird; unable to induce bug
+#FINAL TODO: eliminate printStats functions (waste of space)
 
 #import and initialize pygame
 from fractions import gcd
@@ -22,7 +21,6 @@ class stdSprite(pygame.sprite.Sprite):
 		self.oldPosY = self.posY
 		self.posX = posX
 		self.posY = posY
-		#self.shown = False
 
 	def show(self):
 		self.posX = self.oldPosX
@@ -68,17 +66,14 @@ class animatedSprite(stdSprite):
 	def update(self):
 		#the sprite moves y units up for every x units right, this ratio is obtained by run/rise if run > rise
 		#if rise > run, the sprite moves x units right for every y units up and is obtained by rise/run
-		#assume that the sprite is moving
-		#self.stopped = False
-		self.dx = 0
-		self.dy = 0
+		print self.movementQueue
 		if self.stopped and self.movementQueue:
-			print "stuff"
 			temp = self.movementQueue.popleft()
 			self.destinationX = temp[0]
 			self.destinationY = temp[1]
 			self.rise = self.destinationY - self.posY
 			self.run = self.destinationX - self.posX
+			self.speed = temp[2]
 			if self.destinationX > self.posX:
 				self.right = True
 			else:
@@ -97,10 +92,9 @@ class animatedSprite(stdSprite):
 				if abs(self.rise) > 0 and self.stopped == False:
 					#This sets DX based on if it has to go right
 					if self.right:
-						self.dx = 1 * self.speed
+						self.posX += self.speed
 					else:
-						self.dx = -1 * self.speed
-
+						self.posX -= self.speed
 					#increment the counter
 					self.counter += 1
 					#e.g: for every 3 right, go up 1... this checks for the "3 right"
@@ -108,37 +102,32 @@ class animatedSprite(stdSprite):
 						#reset the counter... more efficient to use modulo?
 						self.counter = 0
 						if self.down:
-							self.dy = 1 * self.speed
+							self.posY += self.speed
 						else:
-							self.dy = -1 * self.speed
-					else:
-						print "stuff"
-						self.dy = 0
+							self.posY -= self.speed
 
 			#if rise and run is equal
 			elif self.run == self.rise:
 				#if the sprite needs to go down or up
 				if self.rise != 0:
 					if self.right:
-						self.dx = 1 * self.speed
+						self.posX += self.speed
 					else: 
-						self.dx = -1 * self.speed
-
+						self.posX -= self.speed
 					if self.down:
-						self.dy = 1 * self.speed
+						self.posY += self.speed
 					else: 
-						self.dy = -1 * self.speed
+						self.posY -= self.speed
 
 			#if the sprite's run is greater than its rise
 			elif abs(self.rise) > abs(self.run):
 				#if the sprite has to go up and that it is moving
 				if abs(self.run) > 0 and self.stopped == False:
 					#This sets DX based on if it has to go right
-					#print "stuff"
 					if self.right:
-						self.dy = 1 * self.speed
+						self.posY += self.speed
 					else:
-						self.dy = -1 * self.speed
+						self.posY -= self.speed
 					#increment the counter
 					self.counter += 1
 					#e.g: for every 3 right, go down 1... this checks for the "3 right"
@@ -146,31 +135,31 @@ class animatedSprite(stdSprite):
 						#reset the counter... more efficient to use modulo?
 						self.counter = 0
 						if self.down:
-							self.dx = 1 * self.speed
+							self.posX += self.speed
 						else:
-							self.dx = -1 * self.speed
-					else:
-						print "stuff"
-						self.dx = 0
+							self.posX -= self.speed
 
+		#can't use posX and posY instead of this because the sprite could be hidden
 		location = self.getPosition()
-		self.posX += self.dx
-		self.posY += self.dy
+		
+		#this is temporary, fix this later
 		#if the sprite is within 10 pixels of its destination, just snap it to its destination
 		if (location[0] < self.destinationX + 10 and location[0] > self.destinationX - 10) and (location[1] < self.destinationY + 10 and location[1] > self.destinationY - 10):
 			self.correct()	
+			self.stopped = True
 		self.rect.center = (self.posX, self.posY)
 
 	#for debugging purposes when i was developing this
 	def printStats(self):
 		print "Sprite center: " + str(self.rect.center)
 		print "Sprite destination: " + str((self.destinationX, self.destinationY))
-		print "dx: " + str(self.dx)
-		print "dy: " + str(self.dy)
 
-	def moveToLocation(self, destX, destY):
-		self.movementQueue.append((destX, destY))
-	 	self.printStats()
+	def moveToLocation(self, destX, destY, speed=1):
+		if self.speed > 0:
+			self.movementQueue.append((destX, destY, speed))
+	 		self.printStats()
+	 	else:
+	 		return
 	def pause(self):
 		self.paused = True
 
@@ -180,9 +169,7 @@ class animatedSprite(stdSprite):
 	def correct(self):
 		self.posX = self.destinationX
 		self.posY = self.destinationY
-	
-	dx = 0
-	dy = 0
+
 	destinationX = 0
 	destinationY = 0
 	isShown = True

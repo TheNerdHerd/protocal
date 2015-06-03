@@ -23,6 +23,7 @@ def main():
 				keepGoing = False
 			elif event.type == pygame.MOUSEBUTTONDOWN:
 				mySprite.moveToLocation(100, 200)
+				mySprite.moveToLocation(200, 400, 2)
 				#mySprite.printStats()
 				#mySprite.hide()
 			#elif event.type == pygame.MOUSEBUTTONUP:
