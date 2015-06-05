@@ -112,7 +112,7 @@ class animatedSprite(stdSprite):
 						else:
 							self.dy = -1 * self.speed
 					else:
-						print "stuff"
+						#print "stuff"
 						self.dy = 0
 
 			#if rise and run is equal
@@ -121,12 +121,12 @@ class animatedSprite(stdSprite):
 				if self.rise != 0:
 					if self.right:
 						self.dx = 1 * self.speed
-					else: 
+					else:
 						self.dx = -1 * self.speed
 
 					if self.down:
 						self.dy = 1 * self.speed
-					else: 
+					else:
 						self.dy = -1 * self.speed
 
 			#if the sprite's run is greater than its rise
@@ -158,7 +158,7 @@ class animatedSprite(stdSprite):
 		self.posY += self.dy
 		#if the sprite is within 10 pixels of its destination, just snap it to its destination
 		if (location[0] < self.destinationX + 10 and location[0] > self.destinationX - 10) and (location[1] < self.destinationY + 10 and location[1] > self.destinationY - 10):
-			self.correct()	
+			self.correct()
 		self.rect.center = (self.posX, self.posY)
 
 	#for debugging purposes when i was developing this
@@ -180,7 +180,7 @@ class animatedSprite(stdSprite):
 	def correct(self):
 		self.posX = self.destinationX
 		self.posY = self.destinationY
-	
+
 	dx = 0
 	dy = 0
 	destinationX = 0
@@ -228,7 +228,7 @@ def mouseButtonUp(event):
 	else:
 		return False
 
-#spriteClicked: returns true if clickLocation is touching sprite, else false. 
+#spriteClicked: returns true if clickLocation is touching sprite, else false.
 #clickLocation is event.pos if the event is pygame.MOUSEBUTTONDOWN, clickLocation is a tuple of two values representing the x and y coords of the click
 def spriteClicked(clickLocation, sprite):
 	if sprite.rect.collidePoint(clickLocation):
@@ -242,7 +242,7 @@ def surfaceClicked(clickLocation, surface, posX, posY):
 	else:
 		return False
 
-#createButton: creates 
+#createButton: creates
 def createButton(positionX, positionY, imageLocation):
 	mySprite = stdSprite(posX, posY, imageLocation)
 	return mySprite
@@ -252,4 +252,4 @@ def main():
 	print "This is not a standalone program, import into your pygame program"
 
 if __name__ == "__main__":
-	main()  
+	main()
