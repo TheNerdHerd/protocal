@@ -1,60 +1,57 @@
+#TODO
 #in animation sprite....
-#FINAL TODO: eliminate printStats functions (waste of space)
+#can one use decimals to command a location?
+#if the sprite stops with stop(), later commands are messed up
 
 #import and initialize pygame
 from fractions import gcd
 from collections import deque
 import pygame
 pygame.init()
-#classes
+
 #stdsprite: a basic sprite used in the createButton function
 #a stdsprite is represented by one image, and is drawn to (posX, posY)... very basic
 #you will have to inherit this if create a sprite based off of this
+#a sprite is always hidden when first created, use show() to display it
 class stdSprite(pygame.sprite.Sprite):
-	def __init__(self, posX, posY, imageLocation):
+	def __init__(self, posX, posY, imageLocation=0):
 		pygame.sprite.Sprite.__init__(self)
 		self.posX = posX
 		self.posY = posY
 		self.image = pygame.image.load(imageLocation)
 		self.rect = self.image.get_rect()
-		self.shown = True
-		self.oldPosY = self.posY
+		self.shown = False
 		self.posX = posX
 		self.posY = posY
 
 	def show(self):
-		self.posX = self.oldPosX
-		self.posY = self.oldPosY
 		self.shown = True
 
+	def hide(self):
+		self.shown = False
+
 	def update(self):
-		self.rect.center = (self.posX, self.posY)
+		if shown:
+			self.rect.center = (self.posX, self.posY)
+		else: 
+			self.rect.center = (-1000, -1000)
 
 	def getPosition(self):
-		#if the sprite is shown
-		if self.shown:
-			return (self.posX, self.posY)
-		#if the sprite is hidden
-		else:
-			return (self.oldPosX, self.oldPosY)
+		return (self.posX, self.posY)
 
-	def toggleVisibility():
-		if shown:
+	def toggleVisibility(self):
+		if self.shown:
 			self.hide()
-			shown = False
 		else:
 			self.show()
-			shown = True
 
 	posX = -1000
 	posY = -1000
-	oldPosX = -1000
-	oldPosY = -1000
 	shown = True
 
 #animatedSprite: provides a sprite whose purpose is moving about programatically, inherits from stdSprite
 class animatedSprite(stdSprite):
-	def __init__(self, screen, background, posX, posY, imageLocation, speed = 1):
+	def __init__(self, posX, posY, imageLocation, speed = 1):
 		pygame.sprite.Sprite.__init__(self)
 		stdSprite.__init__(self, posX, posY, imageLocation)
 		self.destinationX = posX
@@ -66,7 +63,6 @@ class animatedSprite(stdSprite):
 	def update(self):
 		#the sprite moves y units up for every x units right, this ratio is obtained by run/rise if run > rise
 		#if rise > run, the sprite moves x units right for every y units up and is obtained by rise/run
-		print self.movementQueue
 		if self.stopped and self.movementQueue:
 			temp = self.movementQueue.popleft()
 			self.destinationX = temp[0]
@@ -138,16 +134,16 @@ class animatedSprite(stdSprite):
 							self.posX += self.speed
 						else:
 							self.posX -= self.speed
-
-		#can't use posX and posY instead of this because the sprite could be hidden
-		location = self.getPosition()
 		
 		#this is temporary, fix this later
-		#if the sprite is within 10 pixels of its destination, just snap it to its destination
-		if (location[0] < self.destinationX + 10 and location[0] > self.destinationX - 10) and (location[1] < self.destinationY + 10 and location[1] > self.destinationY - 10):
+		#if the sprite is within 5 pixels of its destination, just snap it to its destination
+		if (self.posX < self.destinationX + 5 and self.posX > self.destinationX - 5) and (self.posY < self.destinationY + 5 and self.posY > self.destinationY - 5):
 			self.correct()	
 			self.stopped = True
-		self.rect.center = (self.posX, self.posY)
+		if self.shown:
+			self.rect.center = (self.posX, self.posY)
+		else: 
+			self.rect.center = (-1000, -1000)
 
 	#for debugging purposes when i was developing this
 	def printStats(self):
@@ -160,11 +156,17 @@ class animatedSprite(stdSprite):
 	 		self.printStats()
 	 	else:
 	 		return
+
 	def pause(self):
 		self.paused = True
 
 	def play(self):
 		self.paused = False
+
+	#def stop(self):
+	#	self.destinationX = self.posX
+	#	self.destinationY = self.posY
+	#	self.stopped = True
 
 	def correct(self):
 		self.posX = self.destinationX
@@ -172,7 +174,6 @@ class animatedSprite(stdSprite):
 
 	destinationX = 0
 	destinationY = 0
-	isShown = True
 	speed = 0
 	rise = 0
 	run = 0
@@ -180,6 +181,31 @@ class animatedSprite(stdSprite):
 	stopped = True
 	right = False
 	down = False
+
+#a jacked up pygame.Surface object
+class superSurface(stdSprite):
+	def __init__(self, screen, length, width, posX, posY):
+		pygame.sprite.Sprite.__init__(self)
+		#stdSprite.__init__(self)
+		self.image = pygame.Surface((length, width))
+		self.screen = screen
+		self.length = length
+		self.width = width
+		self.posX = posX
+		self.posY = posY
+		self.rect = self.image.get_rect()
+		self.centerX = posX + (0.5 * self.length)
+		self.centerY = posY + (0.5 * self.width)
+
+	def update(self):
+		self.screen.blit(self.image, (self.centerX - (0.5 * self.length), self.centerY - (0.5 * self.width)))
+
+	#TODO: implement function overloading to determine the type of resize
+	def resize(self, length, width):
+		self.image = pygame.Surface((length, width))
+		self.length = length
+		self.width = width
+		self.rect = self.image.get_rect()
 
 #createWindow: creates a window with the size, and the caption title
 def createMainWindow(size, caption):
@@ -233,7 +259,6 @@ def surfaceClicked(clickLocation, surface, posX, posY):
 def createButton(positionX, positionY, imageLocation):
 	mySprite = stdSprite(posX, posY, imageLocation)
 	return mySprite
-
 
 def main():
 	print "This is not a standalone program, import into your pygame program"
