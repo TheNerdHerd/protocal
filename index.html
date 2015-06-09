@@ -5,28 +5,45 @@
     <title>Protocal</title>
     <meta name="viewport" content="initial-scale=1, width=device-width">
 
-    <!--CSS and font stuffs-->
+    <!--Stuff to make it purdy-->
     <link href='http://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/stylesheet.css">
   </head>
   <body>
-    <div id="main">
-      <div id="headline">
+    <div id="headline">
+      <div class="container">
         <header>
           <h1>Protocal</h1><!--TODO: Replace with header logo-->
-          <p>An open-source sidescroller built in pygame.</p>
+          <p>An open-source sidescroller made in python</p>
         </header>
-      </div><!--#headline-->
+        <div id="about">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Praesent ut dui et mauris semper vehicula. Pellentesque ultrices
+            nec leo non ullamcorper. Donec eget orci aliquet nibh rutrum interdum.
+            Nulla bibendum interdum feugiat. Integer pulvinar enim non rhoncus egestas.
+            Sed vitae tincidunt ligula. Duis sodales vel arcu ac scelerisque.
+          </p>
+        </div>
+      </div><!--.container-->
+    </div><!--#headline-->
 
-      <div id="about">
-        <p>TODO</p>
-      </div><!--#about-->
-
-    </div><!--#main-->
+    <div id="signup">
+      <div class="container">
+        <p>Sign up for our newsletter</p>
+        <form action="" autocomplete="on">
+          <label for="name">First Name</label><br>
+          <input type="email" name="fname" id="name" placeholder="Joe"><br>
+          <label for="email">Email address*</label><br>
+          <input type="text" name="email" id="email" placeholder="username@example.com" required><br>
+          <input type="submit" value="Submit">
+        </form>
+      </div><!--.container-->
+    </div><!--#signup-->
 
     <footer>
       <div class="container">
-        <p>TODO</p>
+        <p>TODO: Add links and stuff</p>
       </div>
     </footer>
 

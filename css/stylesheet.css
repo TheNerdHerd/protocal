@@ -1,12 +1,46 @@
 body {
   background-color: #222222;
+  color: #fafafa;
+  font-family: roboto, helvetica, sans-serif;
 }
 
-#headline {
+.container {
+  margin:auto;
+  max-width: 800px;
+}
+
+@media screen and (min-width: 600px) {
+  .container {
+    
+  }
+}
+
+#headline header {
   text-align: center;
-  color: #3e9121;
+  color: #4bba25;
 }
 #headline h1 {
   font-family: Oswald, sans-serif;
-  text-shadow: 0px, 0px, 6px, #b8c6d7;
+  font-weight: bold;
+  text-shadow: 0px 1px 4px #b8c6d7;
+  font-size: 48px;
+}
+
+#signup {
+  background-color: rgba(88, 176, 33, 0.78);
+}
+
+input {
+  border: 1px solid #AFAFAF;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+input:not([type="submit"]) {
+  background-color: #FFFFFF;
+  height: 20px;
+}
+
+label {
+  margin: 2px;
 }
