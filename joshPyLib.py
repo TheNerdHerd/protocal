@@ -33,7 +33,7 @@ class stdSprite(pygame.sprite.Sprite):
 	def update(self):
 		if shown:
 			self.rect.center = (self.posX, self.posY)
-		else: 
+		else:
 			self.rect.center = (-1000, -1000)
 
 	def getPosition(self):
@@ -100,7 +100,7 @@ class animatedSprite(stdSprite):
 						if self.down:
 							self.posY += self.speed
 						else:
-<<<<<<< HEAD
+<<<<<<< HEAD #Runtime error. Expected indented block. So glad it's your fault and not mine.
 							self.dy = -1 * self.speed
 					else:
 						#print "stuff"
@@ -125,11 +125,11 @@ class animatedSprite(stdSprite):
 						self.dy = -1 * self.speed
 =======
 						self.posX += self.speed
-					else: 
+					else:
 						self.posX -= self.speed
 					if self.down:
 						self.posY += self.speed
-					else: 
+					else:
 						self.posY -= self.speed
 >>>>>>> origin/master
 
@@ -152,16 +152,16 @@ class animatedSprite(stdSprite):
 							self.posX += self.speed
 						else:
 							self.posX -= self.speed
-		
+
 		#this is temporary, fix this later
 <<<<<<< HEAD
 		#if the sprite is within 5 pixels of its destination, just snap it to its destination
 		if (self.posX < self.destinationX + 5 and self.posX > self.destinationX - 5) and (self.posY < self.destinationY + 5 and self.posY > self.destinationY - 5):
-			self.correct()	
+			self.correct()
 			self.stopped = True
 		if self.shown:
 			self.rect.center = (self.posX, self.posY)
-		else: 
+		else:
 			self.rect.center = (-1000, -1000)
 =======
 		#if the sprite is within 10 pixels of its destination, just snap it to its destination
@@ -169,7 +169,7 @@ class animatedSprite(stdSprite):
 <<<<<<< HEAD
 			self.correct()
 =======
-			self.correct()	
+			self.correct()
 			self.stopped = True
 >>>>>>> origin/master
 		self.rect.center = (self.posX, self.posY)
