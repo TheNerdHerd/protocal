@@ -13,7 +13,7 @@ pygame.init()
 #a stdsprite is represented by one image, and is drawn to (posX, posY)... very basic
 #you will have to inherit this if create a sprite based off of this
 #a sprite is always hidden when first created, use show() to display it
-class stdSprite(pygame.sprite.Sprite):
+class imgSprite(pygame.sprite.Sprite):
 	def __init__(self, posX, posY, imageLocation=0):
 		pygame.sprite.Sprite.__init__(self)
 		self.posX = posX
@@ -50,10 +50,10 @@ class stdSprite(pygame.sprite.Sprite):
 	shown = True
 
 #animatedSprite: provides a sprite whose purpose is moving about programatically, inherits from stdSprite
-class animatedSprite(stdSprite):
+class animatedSprite(imgSprite):
 	def __init__(self, posX, posY, imageLocation, speed = 1):
 		pygame.sprite.Sprite.__init__(self)
-		stdSprite.__init__(self, posX, posY, imageLocation)
+		imgSprite.__init__(self, posX, posY, imageLocation)
 		self.destinationX = posX
 		self.destinationY = posY
 		self.printStats()
@@ -100,30 +100,13 @@ class animatedSprite(stdSprite):
 						if self.down:
 							self.posY += self.speed
 						else:
-<<<<<<< HEAD #Runtime error. Expected indented block. So glad it's your fault and not mine.
-							self.dy = -1 * self.speed
-					else:
-						#print "stuff"
-						self.dy = 0
-=======
 							self.posY -= self.speed
->>>>>>> origin/master
 
 			#if rise and run is equal
 			elif self.run == self.rise:
 				#if the sprite needs to go down or up
 				if self.rise != 0:
 					if self.right:
-<<<<<<< HEAD
-						self.dx = 1 * self.speed
-					else:
-						self.dx = -1 * self.speed
-
-					if self.down:
-						self.dy = 1 * self.speed
-					else:
-						self.dy = -1 * self.speed
-=======
 						self.posX += self.speed
 					else:
 						self.posX -= self.speed
@@ -131,7 +114,6 @@ class animatedSprite(stdSprite):
 						self.posY += self.speed
 					else:
 						self.posY -= self.speed
->>>>>>> origin/master
 
 			#if the sprite's run is greater than its rise
 			elif abs(self.rise) > abs(self.run):
@@ -154,7 +136,6 @@ class animatedSprite(stdSprite):
 							self.posX -= self.speed
 
 		#this is temporary, fix this later
-<<<<<<< HEAD
 		#if the sprite is within 5 pixels of its destination, just snap it to its destination
 		if (self.posX < self.destinationX + 5 and self.posX > self.destinationX - 5) and (self.posY < self.destinationY + 5 and self.posY > self.destinationY - 5):
 			self.correct()
@@ -163,17 +144,6 @@ class animatedSprite(stdSprite):
 			self.rect.center = (self.posX, self.posY)
 		else:
 			self.rect.center = (-1000, -1000)
-=======
-		#if the sprite is within 10 pixels of its destination, just snap it to its destination
-		if (location[0] < self.destinationX + 10 and location[0] > self.destinationX - 10) and (location[1] < self.destinationY + 10 and location[1] > self.destinationY - 10):
-<<<<<<< HEAD
-			self.correct()
-=======
-			self.correct()
-			self.stopped = True
->>>>>>> origin/master
-		self.rect.center = (self.posX, self.posY)
->>>>>>> origin/master
 
 	#for debugging purposes when i was developing this
 	def printStats(self):
@@ -202,11 +172,6 @@ class animatedSprite(stdSprite):
 		self.posX = self.destinationX
 		self.posY = self.destinationY
 
-<<<<<<< HEAD
-	dx = 0
-	dy = 0
-=======
->>>>>>> origin/master
 	destinationX = 0
 	destinationY = 0
 	speed = 0
@@ -217,23 +182,57 @@ class animatedSprite(stdSprite):
 	right = False
 	down = False
 
+#A class that stores a scene of the game
+class scene():
+	def __init__(self, screen, background, sprites=0):
+		self.sprites = sprites
+		self.allSprites = pygame.sprite.Group()
+		#for sprite in sprites:
+		#	self.allSprites.add(sprite)
+		self.screen = screen
+		self.background = background
+		self.shown = False
+
+	def update(self):
+		print self.shown
+		self.allSprites.clear(self.screen, self.background)
+		if self.shown:
+
+			self.allSprites.update()
+			self.allSprites.draw(self.background)
+		else:
+			self.allSprites.update()
+	#still trying to figure out how to implement
+	def deleteSprite(self, sprite):
+		self.allSprites.remove(sprite)
+
+	def addSprite(self, sprite):
+		self.allSprites.add(sprite)
+
+	def hide(self):
+		self.shown = False
+		self.allSprites.clear(self.screen, self.background)
+
+	def show(self):
+		self.shown = True
+
 #a jacked up pygame.Surface object
-class superSurface(stdSprite):
+class superSurface():
 	def __init__(self, screen, length, width, posX, posY):
 		pygame.sprite.Sprite.__init__(self)
-		#stdSprite.__init__(self)
 		self.image = pygame.Surface((length, width))
 		self.screen = screen
 		self.length = length
 		self.width = width
-		self.posX = posX
-		self.posY = posY
 		self.rect = self.image.get_rect()
 		self.centerX = posX + (0.5 * self.length)
 		self.centerY = posY + (0.5 * self.width)
 
 	def update(self):
 		self.screen.blit(self.image, (self.centerX - (0.5 * self.length), self.centerY - (0.5 * self.width)))
+
+	def draw(self, background):
+		return
 
 	#TODO: implement function overloading to determine the type of resize
 	def resize(self, length, width):
@@ -290,9 +289,9 @@ def surfaceClicked(clickLocation, surface, posX, posY):
 	else:
 		return False
 
-#createButton: creates
+#createButton: creates a button
 def createButton(positionX, positionY, imageLocation):
-	mySprite = stdSprite(posX, posY, imageLocation)
+	mySprite = imgSprite(posX, posY, imageLocation)
 	return mySprite
 
 def main():
