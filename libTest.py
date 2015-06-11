@@ -38,11 +38,11 @@ def main():
 				#mySprite.play()
 		screen.blit(background, (0, 0))
 		#screen.blit(square, (200, 200))
-		
+
 		allSprites.clear(screen, background)
 		allSprites.update()
 		#allSprites.draw(screen)
-		
+
 		pygame.display.flip()
 
 if __name__ == "__main__":
