@@ -100,21 +100,17 @@ class animatedSprite(stdSprite):
 						if self.down:
 							self.posY += self.speed
 						else:
-<<<<<<< HEAD #Runtime error. Expected indented block. So glad it's your fault and not mine.
 							self.dy = -1 * self.speed
 					else:
 						#print "stuff"
 						self.dy = 0
-=======
-							self.posY -= self.speed
->>>>>>> origin/master
+						self.posY -= self.speed
 
 			#if rise and run is equal
 			elif self.run == self.rise:
 				#if the sprite needs to go down or up
 				if self.rise != 0:
 					if self.right:
-<<<<<<< HEAD
 						self.dx = 1 * self.speed
 					else:
 						self.dx = -1 * self.speed
@@ -123,7 +119,6 @@ class animatedSprite(stdSprite):
 						self.dy = 1 * self.speed
 					else:
 						self.dy = -1 * self.speed
-=======
 						self.posX += self.speed
 					else:
 						self.posX -= self.speed
@@ -131,7 +126,6 @@ class animatedSprite(stdSprite):
 						self.posY += self.speed
 					else:
 						self.posY -= self.speed
->>>>>>> origin/master
 
 			#if the sprite's run is greater than its rise
 			elif abs(self.rise) > abs(self.run):
@@ -154,7 +148,7 @@ class animatedSprite(stdSprite):
 							self.posX -= self.speed
 
 		#this is temporary, fix this later
-<<<<<<< HEAD
+
 		#if the sprite is within 5 pixels of its destination, just snap it to its destination
 		if (self.posX < self.destinationX + 5 and self.posX > self.destinationX - 5) and (self.posY < self.destinationY + 5 and self.posY > self.destinationY - 5):
 			self.correct()
@@ -163,17 +157,17 @@ class animatedSprite(stdSprite):
 			self.rect.center = (self.posX, self.posY)
 		else:
 			self.rect.center = (-1000, -1000)
-=======
+
 		#if the sprite is within 10 pixels of its destination, just snap it to its destination
 		if (location[0] < self.destinationX + 10 and location[0] > self.destinationX - 10) and (location[1] < self.destinationY + 10 and location[1] > self.destinationY - 10):
-<<<<<<< HEAD
+
 			self.correct()
-=======
+
 			self.correct()
 			self.stopped = True
->>>>>>> origin/master
+
 		self.rect.center = (self.posX, self.posY)
->>>>>>> origin/master
+
 
 	#for debugging purposes when i was developing this
 	def printStats(self):
@@ -202,11 +196,11 @@ class animatedSprite(stdSprite):
 		self.posX = self.destinationX
 		self.posY = self.destinationY
 
-<<<<<<< HEAD
+
 	dx = 0
 	dy = 0
-=======
->>>>>>> origin/master
+
+
 	destinationX = 0
 	destinationY = 0
 	speed = 0
