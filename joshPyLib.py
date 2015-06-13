@@ -1,6 +1,6 @@
 #TODO
 #in animation sprite....
-#can one use decimals to command a location?
+#can one use floats/doubles to command a location?
 #if the sprite stops with stop(), later commands are messed up
 
 #import and initialize pygame
@@ -10,7 +10,7 @@ import pygame
 pygame.init()
 
 #stdsprite: a basic sprite used in the createButton function
-#a stdsprite is represented by one image, and is drawn to (posX, posY)... very basic
+#an imgsprite is represented by one image, and is drawn to (posX, posY)
 #you will have to inherit this if create a sprite based off of this
 #a sprite is always hidden when first created, use show() to display it
 class imgSprite(pygame.sprite.Sprite):
@@ -38,6 +38,10 @@ class imgSprite(pygame.sprite.Sprite):
 
 	def getPosition(self):
 		return (self.posX, self.posY)
+
+	def setPosition(self, posX, posY):
+		self.posX = posX
+		self.posY = posY
 
 	def toggleVisibility(self):
 		if self.shown:
@@ -184,24 +188,20 @@ class animatedSprite(imgSprite):
 
 #A class that stores a scene of the game
 class scene():
-	def __init__(self, screen, background, sprites=0):
-		self.sprites = sprites
+	def __init__(self, screen, background):
 		self.allSprites = pygame.sprite.Group()
-		#for sprite in sprites:
-		#	self.allSprites.add(sprite)
 		self.screen = screen
 		self.background = background
 		self.shown = False
 
 	def update(self):
-		print self.shown
-		self.allSprites.clear(self.screen, self.background)
 		if self.shown:
-
+			self.allSprites.clear(self.screen, self.background)
 			self.allSprites.update()
 			self.allSprites.draw(self.background)
 		else:
 			self.allSprites.update()
+
 	#still trying to figure out how to implement
 	def deleteSprite(self, sprite):
 		self.allSprites.remove(sprite)
@@ -217,7 +217,8 @@ class scene():
 		self.shown = True
 
 #a jacked up pygame.Surface object
-class superSurface():
+#inherits from imgSprite so I don't have to retype the code for hide() and show()
+class superSurface(imgSprite):
 	def __init__(self, screen, length, width, posX, posY):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.Surface((length, width))
@@ -227,9 +228,13 @@ class superSurface():
 		self.rect = self.image.get_rect()
 		self.centerX = posX + (0.5 * self.length)
 		self.centerY = posY + (0.5 * self.width)
+		self.shown = False
 
 	def update(self):
-		self.screen.blit(self.image, (self.centerX - (0.5 * self.length), self.centerY - (0.5 * self.width)))
+		if self.shown:
+			self.rect.center = (self.centerX, self.centerY)
+		else:
+			self.rect.center = (-1000, -1000)
 
 	def draw(self, background):
 		return
